@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { handle } from '@hono/node-server/vercel';
+import { handle } from 'hono/vercel';
 import { cors } from 'hono/cors';
 import homeRoute from '../src/routes/home';
 import animeListRoute from '../src/routes/anime_list';
@@ -9,9 +9,7 @@ import genreRoute from '../src/routes/genre_list';
 import ongoingRoute from '../src/routes/ongoing';
 import completeRoute from '../src/routes/complete';
 
-export const config = {
-    maxDuration: 30
-};
+export const runtime = 'nodejs';
 
 const app = new Hono().basePath('/api');
 
@@ -44,3 +42,5 @@ app.get('/', (c) => {
 });
 
 export default handle(app);
+export const GET = handle(app);
+export const POST = handle(app);
