@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api"
+    }
+  ],
+  "build": {
+    "env": {
+      "OTAKUDESU_URL": "https://otakudesu.best"
+    }
+  }
+}
