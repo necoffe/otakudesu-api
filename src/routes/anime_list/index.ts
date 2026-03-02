@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import axios from "axios";
+import axios from "../../libs/axios_instance";
 import { load } from 'cheerio';
 import { animeList } from "../../libs/scrape_anime_list";
 

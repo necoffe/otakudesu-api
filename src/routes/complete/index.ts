@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../libs/axios_instance";
 import { load } from "cheerio";
 import { Hono } from "hono";
 import { complete } from "../../libs/scrape_ongoing_complete";
