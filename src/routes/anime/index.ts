@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import axios from "../../libs/axios_instance";
+import { fetchText, fetchPost } from "../../libs/axios_instance";
 import { load } from "cheerio";
 import { detailAnime, detailEps } from "../../libs/scrape_detail_anime";
 import { searchAnime } from "../../libs/scrape_search_anime";
@@ -15,7 +15,7 @@ animeRoute.get('/search', async (c) => {
         }, 404);
     };
 
-    const { data } = await axios.get(`${process.env.OTAKUDESU_URL}/?s=${q}&post_type=anime`);
+    const data = await fetchText(`${process.env.OTAKUDESU_URL}/?s=${q}&post_type=anime`);
     const $ = load(data);
 
     const searchScrape = $('.vezone .venser .venutama .page .chivsrc li').toString();
@@ -31,7 +31,7 @@ animeRoute.get('/search', async (c) => {
 
 animeRoute.get('/:slug', async (c) => {
     const slug = c.req.param('slug');
-    const { data } = await axios.get(`${process.env.OTAKUDESU_URL}/anime/${slug}`);
+    const data = await fetchText(`${process.env.OTAKUDESU_URL}/anime/${slug}`);
     const $ = load(data);
 
     const detailAnimeScrape = $('.venser .fotoanime').toString();
@@ -55,7 +55,7 @@ animeRoute.get('/:slug', async (c) => {
 
 animeRoute.get('/episode/:eps', async (c) => {
     const { eps } = c.req.param();
-    const { data } = await axios.get(`${process.env.OTAKUDESU_URL}/episode/${eps}`);
+    const data = await fetchText(`${process.env.OTAKUDESU_URL}/episode/${eps}`);
     const $ = load(data);
 
     const detailEpsScrape = $('#venkonten .venser').toString();
@@ -74,23 +74,23 @@ animeRoute.get('/episode/:eps', async (c) => {
     if (detailEpsResult.mirror_streams.length > 0) {
         try {
             // Get nonce first
-            const nonceRes = await axios.post(ajaxUrl, new URLSearchParams({
+            const nonceRes = await fetchPost(ajaxUrl, new URLSearchParams({
                 action: 'aa1208d27f29ca340c92c66d1926f13f'
             }));
-            const nonce = nonceRes.data?.data;
+            const nonce = nonceRes?.data;
 
             // Resolve each mirror
             for (const mirror of detailEpsResult.mirror_streams) {
                 try {
                     const decoded = JSON.parse(atob(mirror.data_content));
-                    const mirrorRes = await axios.post(ajaxUrl, new URLSearchParams({
+                    const mirrorRes = await fetchPost(ajaxUrl, new URLSearchParams({
                         id: decoded.id,
                         i: decoded.i,
                         q: decoded.q,
                         nonce,
                         action: '2a3505c93b0035d3f455df82bf976b84'
                     }));
-                    const html = atob(mirrorRes.data?.data || '');
+                    const html = atob(mirrorRes?.data || '');
                     const $mirror = load(html);
                     const streamUrl = $mirror('iframe').attr('src') || null;
                     resolvedMirrors.push({
@@ -117,7 +117,7 @@ animeRoute.get('/episode/:eps', async (c) => {
 
 animeRoute.get('/batch/:slug', async (c) => {
     const { slug } = c.req.param();
-    const { data } = await axios.get(`${process.env.OTAKUDESU_URL}/batch/${slug}`);
+    const data = await fetchText(`${process.env.OTAKUDESU_URL}/batch/${slug}`);
     const $ = load(data);
 
     const animeScrape = $('#venkonten .venser').toString();

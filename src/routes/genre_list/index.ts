@@ -1,4 +1,4 @@
-import axios from "../../libs/axios_instance";
+import { fetchText } from "../../libs/axios_instance";
 import { load } from "cheerio";
 import { Hono } from "hono";
 import { genreList } from "../../libs/scrape_genre";
@@ -6,7 +6,7 @@ import { genreList } from "../../libs/scrape_genre";
 const genreRoute = new Hono();
 
 genreRoute.get('/', async (c) => {
-    const { data } = await axios.get(`${process.env.OTAKUDESU_URL}/genre-list`);
+    const data = await fetchText(`${process.env.OTAKUDESU_URL}/genre-list`);
     const $ = load(data);
 
     const genresScrape = $('.vezone .venser .genres li a').toString();

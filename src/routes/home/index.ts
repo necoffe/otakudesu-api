@@ -1,12 +1,12 @@
 import { Hono } from "hono";
-import axios from '../../libs/axios_instance';
+import { fetchText } from '../../libs/axios_instance';
 import { load } from 'cheerio';
 import { completeAnime, onGoingAnime } from "../../libs/scrape_home";
 
 const homeRoute = new Hono();
 
 homeRoute.get('/', async (c) => {
-    const { data } = await axios.get(process.env.OTAKUDESU_URL || '');
+    const data = await fetchText(process.env.OTAKUDESU_URL || '');
     const $ = load(data);
     
     const onGoingAnimeScrape = $('.venutama .rseries .rapi:first .venz ul li').toString();

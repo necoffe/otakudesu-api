@@ -1,4 +1,4 @@
-import axios from "../../libs/axios_instance";
+import { fetchText } from "../../libs/axios_instance";
 import { load } from "cheerio";
 import { Hono } from "hono";
 import { complete } from "../../libs/scrape_ongoing_complete";
@@ -7,7 +7,7 @@ const completeRoute = new Hono();
 
 completeRoute.get('/:page', async (c) => {
     const { page } = c.req.param();
-    const { data } = await axios.get(`${process.env.OTAKUDESU_URL}/complete-anime/page/${page}`);
+    const data = await fetchText(`${process.env.OTAKUDESU_URL}/complete-anime/page/${page}`);
     const $ = load(data);
 
     const completeScrape = $('#venkonten .vezone .venser .venutama').toString();

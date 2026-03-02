@@ -1,4 +1,4 @@
-import axios from "../../libs/axios_instance";
+import { fetchText } from "../../libs/axios_instance";
 import { load } from "cheerio";
 import { Hono } from "hono";
 import { releaseSchedule } from "../../libs/scrape_release_schedule";
@@ -6,7 +6,7 @@ import { releaseSchedule } from "../../libs/scrape_release_schedule";
 const releaseScheduleRoute = new Hono();
 
 releaseScheduleRoute.get('/', async (c) => {
-    const { data } = await axios.get(`${process.env.OTAKUDESU_URL}/jadwal-rilis`);
+    const data = await fetchText(`${process.env.OTAKUDESU_URL}/jadwal-rilis`);
     const $ = load(data);
 
     const scheduleScrape = $('.vezone .venutama .page .kgjdwl321').toString();
