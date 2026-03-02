@@ -1,12 +1,15 @@
 {
   "name": "otakudesu-api",
+  "type": "module",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "build": "bun build src/server.ts --target node --outfile dist/server.js",
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.9",
-    "axios": "^1.7.3",
     "cheerio": "^1.0.0",
+    "dotenv": "^16.4.5",
     "hono": "^4.5.5"
   },
   "devDependencies": {
