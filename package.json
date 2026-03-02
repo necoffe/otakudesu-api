@@ -1,0 +1,17 @@
+{
+    "name": "otakudesuapi",
+    "version": "1.0.0",
+    "description": "REST API scraper for otakudesu.best - Anime streaming & download links",
+    "main": "index.js",
+    "scripts": {
+        "dev": "node index.js",
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "axios": "^1.7.0",
+        "cheerio": "^1.0.0"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}
